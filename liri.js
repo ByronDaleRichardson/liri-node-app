@@ -1,4 +1,4 @@
-var dataKeys = require("keys.js"); //twitter keys from file
+// var dataKeys = require("keys.js"); //twitter keys from file
 var fs = require("fs"); //file system use
 var twitter = require("twitter"); //twitter use
 var spotify = require("spotify"); //spotify use
@@ -33,4 +33,93 @@ var getSpotify = function(songName) {
 	});
 };
 
-// This is the IMDB fucntion
+/* This is the Twitter function
+var getTweets = function() {
+	var client = new twitter(dataKeys.twitterKeys);
+
+	var params = { screen_name: "", count: 10 };
+
+	client.get("statuses/user_timeline", params, function(error, tweets, response) {
+
+		if (!error) {
+			var data = [];
+			for (var i = 0; i < tweets.length; i++) {
+				data.push({
+					"created at: " : tweets[i].creaded_at,
+					"Tweets: " : tweets.[i].text,
+				});
+			}
+			console.log(data);
+		}
+	});
+}; */
+
+// This is the IMDB function
+var getMovie = function(movieName) {
+	if (movieName === undefined) {
+		movieName = "Mr Nobody";
+	}
+
+	var urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=plot=full&tomatoes=true&r=json";
+
+	request(urlHit, function(err, response, body) {
+		if (!error && response.statusCode == 200) {
+			var data = [];
+			var jsonData = JSON.parse(body);
+
+			data.push({
+				"Title: " : jsonData.Title,
+				"Year: " : jsonData.Year,
+				"Rated: " : jsonData.Rated,
+				"IMDB Rating: " : jsonData.imdbRating,
+				"Country: " : jsonData.Country,
+				"Language: " : jsonData.Language,
+				"Plot: " : jsonData.Plot,
+				"Actors: " : jsonData.Actors,
+				"Rotten Tomatoes Rating: " : jsonData.tomatoeRating,
+				"Rotten Tomatoes URL: " : jsonData.tomatoesURL,
+			});
+			console.log(data);	
+		}
+	});
+};
+
+// This is the function
+var doWhatItSays = function() {
+	fs.readFile("random.txt", "utf8", function(error, data) {
+		console.log(data);
+
+		var dataArr = data.split(",");
+
+		if (dataArr.length == 2) {
+			pick(dataArr[0], dataArr[1]);
+		} else if (dataArr.length == 1) {
+			pick(dataArr[0]);
+		}
+	});
+};
+
+var pick = function(caseData, functionData) {
+	switch (caseData) {
+		case "my-tweets":
+			getTweets();
+			break;
+		case "spotify-this-song":
+			getSpotify(functionData);
+			break;
+		case "movie-this":
+			getMovie(functionData);
+			break;
+		case "do-what-it-says":
+			doWhatItSays();
+			break;
+		default:
+			console.log("LIRI does not know that");				
+	}
+};
+
+var runThis = function(argOne, argTwo) {
+	pick(argOne, argTwo);
+};
+
+runThis(process.argv[2], process.argv[3]);
