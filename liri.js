@@ -1,8 +1,19 @@
-// var dataKeys = require("keys.js"); //twitter keys from file
+var dataKeys = require("./keys.js"); //twitter keys from file
 var fs = require("fs"); //file system use
 var twitter = require("twitter"); //twitter use
 var spotify = require("spotify"); //spotify use
 var request = require("request"); //request use
+
+// Writing to log.txt file
+var writeToLog = function(data) {
+	fs.appendFile("log.txt", '\r\n\r\n');
+	fs.appendFile("log.txt", JSON.stringify(data), function(err) {
+		if (err) {
+			return console.log(err);
+		}
+		console.log("log.txt has been updated!");
+	});
+}
 
 // This is the function for finding artist from spotify
 var getArtist = function(artist) {
@@ -10,7 +21,7 @@ var getArtist = function(artist) {
 };
 
 var getSpotify = function(songName) {
-	if (songname == undefined) {
+	if (songName == undefined) {
 		songName = "Bad";
 	};
 	spotify.search({ type: "track", query: songName }, function(err, data) {
@@ -30,10 +41,11 @@ var getSpotify = function(songName) {
 			});
 		}
 		console.log(data);
+		writeToLog(data);
 	});
 };
 
-/* This is the Twitter function
+// This is the Twitter function
 var getTweets = function() {
 	var client = new twitter(dataKeys.twitterKeys);
 
@@ -46,13 +58,14 @@ var getTweets = function() {
 			for (var i = 0; i < tweets.length; i++) {
 				data.push({
 					"created at: " : tweets[i].creaded_at,
-					"Tweets: " : tweets.[i].text,
+					"Tweets: " : tweets[i].text,
 				});
 			}
 			console.log(data);
+			writeToLog(data);
 		}
 	});
-}; */
+}; 
 
 // This is the IMDB function
 var getMovie = function(movieName) {
@@ -80,6 +93,7 @@ var getMovie = function(movieName) {
 				"Rotten Tomatoes URL: " : jsonData.tomatoesURL,
 			});
 			console.log(data);	
+			writeToLog(data);
 		}
 	});
 };
@@ -88,6 +102,7 @@ var getMovie = function(movieName) {
 var doWhatItSays = function() {
 	fs.readFile("random.txt", "utf8", function(error, data) {
 		console.log(data);
+		writeToLog(data);
 
 		var dataArr = data.split(",");
 
