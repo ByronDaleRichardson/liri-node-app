@@ -76,7 +76,7 @@ var getMovie = function(movieName) {
 	var urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=plot=full&tomatoes=true&r=json";
 
 	request(urlHit, function(err, response, body) {
-		if (!error && response.statusCode == 200) {
+		if (!err && response.statusCode == 200) {
 			var data = [];
 			var jsonData = JSON.parse(body);
 
