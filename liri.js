@@ -57,7 +57,7 @@ var getTweets = function() {
 			var data = [];
 			for (var i = 0; i < tweets.length; i++) {
 				data.push({
-					"created at: " : tweets[i].creaded_at,
+					"created at: " : tweets[i].created_at,
 					"Tweets: " : tweets[i].text,
 				});
 			}
